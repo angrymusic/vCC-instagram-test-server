@@ -12,10 +12,10 @@ let corsOptions = {
 app.use(express.json()); //j
 app.use(cors(corsOptions));
 interface dataType {
-    title: string
-    context: string
-    img: string
-  }
+    title: string;
+    context: string;
+    img: string;
+}
 // Users.create({title:"title1",context:"context1",img:"img1"});
 
 const storage = multer.diskStorage({
@@ -56,9 +56,9 @@ const fileFilter = (req: any, file: any, cb: any) => {
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 app.use("/upload", express.static("upload"));
-app.get("/", async (req, res) => {
+app.post("/", async (req, res) => {
     let imgs: dataType[] = [];
-    const list = Users.findAll({ where: { name: "angrymusic" } });
+    const list = Users.findAll({ where: { name: req.body.name } });
     await list.then((res) => {
         for (let i = 0; i < res.length; i++) {
             imgs.push(res[i].dataValues);
