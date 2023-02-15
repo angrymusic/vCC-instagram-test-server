@@ -50,6 +50,7 @@ const fileFilter = (req: any, file: any, cb: any) => {
     if (file.mimetype == "image/png") {
         cb(null, true);
     } else {
+        console.log("png만 올릴 수 있습니다.");
         cb({ msg: "png 파일만 업로드 가능합니다." }, false);
     }
 };
@@ -66,8 +67,18 @@ app.post("/", async (req, res) => {
     });
     res.send(imgs);
 });
+app.post("/post", (req, res) => {
+    const result = Users.findOne({ where: { img: req.body.img } });
+    result.then((resp) => {
+        res.send(resp);
+    });
+});
 app.post("/add", upload.single("file"), (req, res, next) => {
     res.json(true);
+});
+app.delete("/delete", (req, res) => {
+    const result = Users.destroy({ where: { img: req.body.img } });
+    res.send(result);
 });
 app.listen(port, async () => {
     console.log("server is running on " + port);
